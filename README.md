@@ -1,7 +1,7 @@
 | Request for Proposal  | Outubro de 2025 |
 | ----- | :---- |
 |  | Nome do projeto: Restaurante Japonês na UFSCar |
-| ![][image1]Restaurante Japonês na UFSCar | Cliente: Alexandre Alvaro Gerente do Projeto: Paula |
+|  Restaurante Japonês na UFSCar | Cliente: Alexandre Alvaro Gerente do Projeto: Paula |
 |  | **Objetivo estratégico:** Criação de um sistema para auxiliar a gestão do Restaurante Japonês da UFSCar, seguindo como base o termo de Referência para a contratação de serviços de fornecimento de refeições nos Restaurantes Universitários da Universidade Federal de São Carlos (UFSCar). |
 
 # Objetivo do projeto

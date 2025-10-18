@@ -55,7 +55,10 @@ CREATE TABLE funcionarios (
 CREATE TABLE item_cardapio (
   id_item BIGSERIAL PRIMARY KEY,
   nome_item TEXT NOT NULL UNIQUE,
-  categoria estoque_categoria NOT NULL
+  categoria estoque_categoria NOT NULL,
+  custo_unitario NUMERIC(12,4) NOT NULL CHECK (custo_unitario >= 0),
+  estoque_minimo NUMERIC(12,3) NOT NULL CHECK (estoque_minimo >= 0),
+  funcionario_responsavel BIGINT REFERENCES funcionarios(id_funcionario) ON DELETE SET NULL
 );
 
 -- Estoque
@@ -63,9 +66,6 @@ CREATE TABLE estoque (
   id_estoque BIGSERIAL PRIMARY KEY,
   id_item BIGINT NOT NULL REFERENCES item_cardapio(id_item) ON DELETE CASCADE,
   quantidade NUMERIC(12,3) NOT NULL CHECK (quantidade >= 0),
-  custo_unitario NUMERIC(12,4) NOT NULL CHECK (custo_unitario >= 0),
-  estoque_minimo NUMERIC(12,3) NOT NULL CHECK (estoque_minimo >= 0),
-  funcionario_responsavel BIGINT REFERENCES funcionarios(id_funcionario) ON DELETE SET NULL,
   data_validade DATE
 );
 
@@ -81,7 +81,6 @@ CREATE TABLE cardapio (
   bebida BIGINT REFERENCES item_cardapio(id_item),
   UNIQUE (dia, momento)
 );
-
 
 -- Cliente
 CREATE TABLE cliente (

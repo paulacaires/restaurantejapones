@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste de Padrões CSS</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        body { padding: 30px; }
+        .component-section {
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 25px;
+            background-color: #fdfdfd;
+        }
+        .color-swatch {
+            display: inline-block;
+            width: 100px;
+            height: 100px;
+            border: 1px solid #555;
+            margin-right: 10px;
+            text-align: center;
+            padding-top: 40px;
+            box-sizing: border-box;
+            vertical-align: top;
+        }
+    </style>
+</head>
+<body>
+    <h1>Teste de Guia de Estilo</h1>
+    <p>Teste dos componentes visuais.</p>
+
+    <div class="component-section">
+        <h2>Cores Principais</h2>
+        <div class="color-swatch" style="background-color: var(--cor-primaria); color: white;">Cor primária</div>
+        <div class="color-swatch" style="background-color: var(--cor-secundaria); color: black;">Cor secundária</div>
+        <div class="color-swatch" style="background-color: var(--cor-texto); color: white;">Cor texto</div>
+    </div>
+
+    <div class="component-section">
+        <h2>Tipografia (Títulos e Texto)</h2>
+        <h1>Título de Nível 1</h1>
+        <h2>Título de Nível 2</h2>
+        <p>Não sou bom com textinhos, mas vamos lá esse é um texto básico apenas para ver como o texto ficará.</p>
+    </div>
+
+    <div class="component-section">
+        <h2>Componente: Botões</h2>
+        <p>Use estes botões para todas as ações principais e secundárias.</p>
+        <button class="btn btn-primary">Botão Primário</button>
+        <button class="btn btn-secondary">Botão Secundário</button>
+    </div>
+
+    <div class="component-section">
+        <h2>Componente: Tabela</h2>
+        <p>Ideia de estilo padrão para exibição de dados.</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                    <th>Função</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Carlos Sato</td>
+                    <td>Cozinheiro</td>
+                    <td>
+                        <button class="btn btn-primary">Editar</button>
+                        <button class="btn btn-secondary">Deletar</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Mariana Tanaka</td>
+                    <td>Nutricionista</td>
+                    <td>
+                        <button class="btn btn-primary">Editar</button>
+                        <button class="btn btn-secondary">Deletar</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>João Silva</td>
+                    <td>Operador de caixa</td>
+                    <td>
+                        <button class="btn btn-primary">Editar</button>
+                        <button class="btn btn-secondary">Deletar</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>Ana Oliveira</td>
+                    <td>Auxiliar de cozinha</td>
+                    <td>
+                        <button class="btn btn-primary">Editar</button>
+                        <button class="btn btn-secondary">Deletar</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>Roberto Costa</td>
+                    <td>Estoquista</td>
+                    <td>
+                        <button class="btn btn-primary">Editar</button>
+                        <button class="btn btn-secondary">Deletar</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+<div class="component-section">
+        <h2>Componente: Registro de Consumo</h2>
+        <p>Formulário para registrar o consumo de um cliente e sua avaliação.</p>
+        
+        <form>
+            <div class="form-group">
+                <label for="consumo_cpf">CPF do Cliente:</label>
+                <input type="text" id="consumo_cpf" class="form-control" placeholder="000.000.000-00">
+            </div>
+
+            <div class="form-group">
+                <label for="consumo_data">Data do Cardápio:</label>
+                <input type="date" id="consumo_data" class="form-control">
+            </div>
+
+            <div class="form-group">
+                <label for="consumo_horario">Horário (Refeição):</label>
+                <select id="consumo_horario" class="form-control">
+                    <option value="almoco">Almoço</option>
+                    <option value="janta">Janta</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="avaliacao">Avaliação (Opcional):</label>
+                <select id="avaliacao" class="form-control">
+                    <option value="">Sem avaliação</option>
+                    <option value="5">⭐️⭐️⭐️⭐️⭐️ (Excelente)</option>
+                    <option value="4">⭐️⭐️⭐️⭐️ (Bom)</option>
+                    <option value="3">⭐️⭐️⭐️ (Razoável)</option>
+                    <option value="2">⭐️⭐️ (Ruim)</option>
+                    <option value="1">⭐️ (Péssimo)</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Registrar Consumo</button>
+        </form>
+    </div>
+
+    </div>
+</body>
+</html>

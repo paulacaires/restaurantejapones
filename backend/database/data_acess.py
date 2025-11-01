@@ -4,6 +4,7 @@ from supabase import Client
 CLIENTES_VIEW = "vw_clientes_api" 
 CLIENTES_TABELA = "cliente"
 FUNCIONARIOS_TABELA = "funcionarios"
+CARDAPIO_TABELA = "cardapio"
 
 def buscar_todos_clientes(supabase_client: Client):
     """
@@ -47,4 +48,37 @@ def buscar_todos_funcionarios(supabase_client: Client):
         return response.data
     except Exception as e:
         print(f"Erro ao buscar funcionários: {e}")
+        return None
+    
+
+def buscar_todos_cardapios(supabase_client: Client):
+    """
+    Função que busca todos os cardápios .
+    
+    Esta consulta usa a sintaxe do Supabase para buscar dados de
+    tabelas relacionadas, definidas no create_schema.sql.
+    """
+    try:
+        # A consulta seleciona o dia, momento e o nome dos itens
+        # de cada categoria (entrada, main_sushi, etc.)
+        select_query = (
+            "dia, momento, "
+            "entrada(nome_item), "
+            "main_sushi(nome_item), "
+            "main_ramen(nome_item), "
+            "sobremesa(nome_item), "
+            "bebida(nome_item)"
+        )
+        
+        response = (
+            supabase_client.table(CARDAPIO_TABELA)
+            .select(select_query)
+            .order("dia", desc=True)
+            .execute()
+        )
+        
+        return response.data
+        
+    except Exception as e:
+        print(f"Erro ao buscar cardápio: {e}")
         return None

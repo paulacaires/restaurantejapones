@@ -3,8 +3,10 @@ from flask import Flask, render_template, url_for
 from supabase import create_client, Client
 from dotenv import load_dotenv
 
-from backend.database.data_acess import buscar_todos_funcionarios
-
+from backend.database.data_acess import (
+    buscar_todos_funcionarios,
+    buscar_todos_cardapios
+    )
 load_dotenv()
 
 # Inicializar Flask
@@ -38,6 +40,15 @@ def funcionarios():
     lista_funcionarios = buscar_todos_funcionarios(supabase) or []
     
     return render_template('funcionarios.html', funcionarios=lista_funcionarios)
+
+@app.route('/cardapio')
+def cardapio():
+    if not supabase:
+        return "Erro: Conexão com o banco de dados não estabelecida.", 500
+        
+    lista_cardapios = buscar_todos_cardapios(supabase) or []
+    
+    return render_template('cardapio.html', cardapios=lista_cardapios)
 
 if __name__ == '__main__':
     app.run(debug=True)

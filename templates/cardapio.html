@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Módulo de Cardápio</title>
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    
+    <style>
+        h1 {
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Módulo de Cardápio Diário</h1>
+
+    <h2>Cardápios Cadastrados</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>Dia</th>
+                <th>Momento</th>
+                <th>Entrada</th>
+                <th>Sushi Bar (Main)</th>
+                <th>Ramen (Main)</th>
+                <th>Sobremesa</th>
+                <th>Bebida</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cardapios %}
+            <tr>
+                <td>{{ item.dia }}</td>
+                <td>{{ item.momento }}</td>
+                
+                <td>{{ item.entrada.nome_item }}</td>
+                <td>{{ item.main_sushi.nome_item if item.main_sushi else 'N/A' }}</td>
+                <td>{{ item.main_ramen.nome_item if item.main_ramen else 'N/A' }}</td>
+                <td>{{ item.sobremesa.nome_item if item.sobremesa else 'N/A' }}</td>
+                <td>{{ item.bebida.nome_item if item.bebida else 'N/A' }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="7">Nenhum cardápio cadastrado no banco de dados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</body>
+</html>

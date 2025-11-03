@@ -2,6 +2,9 @@
 Implementação do software de gestão do Restaurante Japonês da UFSCar para a matéria de Gestão de Projetos e Qualidade de Software do Professor Alexandre Alvaro.
 
 # Como rodar o projeto
+
+> Resumo: flask run
+
 Este guia explica como configurar o ambiente de desenvolvimento local para rodar a aplicação Flask.
 
 Crie o Ambiente Virtual (venv) com o código: python -m venv venv

@@ -1,20 +1,8 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Módulo de Funcionários</title>
+{% extends "base.html" %}
 
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+{% block title %}Módulo de Funcionários — Restaurante Japonês{% endblock %}
 
-    <style>
-        h1 {
-            text-align: center;
-        }
-    </style>
-</head>
-<body>
-
+{% block content %}
     <h1>Módulo de Funcionários</h1>
 
     <h2>Funcionários Cadastrados</h2>
@@ -51,6 +39,4 @@
             {% endfor %}
         </tbody>
     </table>
-
-</body>
-</html>
+{% endblock %}

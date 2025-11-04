@@ -4,15 +4,15 @@
     --cor-primaria: #b52e35; 
     --cor-secundaria: #eceadd;
     --cor-texto: #3f395b;
+    --cor-cinza-claro: #fafafa;
     --fonte-principal: Arial, sans-serif;
     --fonte-titulo: 'Asimovian', sans-serif;
 }
 
-
 body {
     font-family: var(--fonte-principal);
     color: var(--cor-texto);
-    background-color: #fafafa;
+    background-color: var(--cor-cinza-claro);
     line-height: 1.6;
     margin: 0;
     padding: 20px;

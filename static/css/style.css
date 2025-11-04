@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Asimovian&display=swap');
+
+:root {
+    --cor-primaria: #b52e35; 
+    --cor-secundaria: #eceadd;
+    --cor-texto: #3f395b;
+    --cor-cinza-claro: #fafafa;
+    --fonte-principal: Arial, sans-serif;
+    --fonte-titulo: 'Asimovian', sans-serif;
+}
+
+body {
+    font-family: var(--fonte-principal);
+    color: var(--cor-texto);
+    background-color: var(--cor-cinza-claro);
+    line-height: 1.6;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    color: var(--cor-primaria);
+    font-family: var(--fonte-titulo);
+}
+
+h2 {
+    color: var(--cor-primaria);
+    font-family: var(--fonte-principal);
+}
+
+/* Padrão de Tabela */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+table th {
+    background-color: var(--cor-secundaria);
+}
+
+/* Padrão de Botão */
+.btn {
+    padding: 10px 15px;
+    border: none;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 4px;
+    display: inline-block;  
+    text-decoration: none;
+    box-sizing: border-box;
+}
+.btn-primary {
+    background-color: var(--cor-primaria);
+    color: white;
+}
+.btn-secondary {
+    background-color: var(--cor-secundaria);
+    color: var(--cor-texto);
+}
+
+/* Padrão de Formulário */
+.form-group {
+    margin-bottom: 15px;
+}
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+.form-control {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}

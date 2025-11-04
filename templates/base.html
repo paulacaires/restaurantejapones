@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Restaurante Japonês{% endblock %}</title>
+    <link rel="icon" type="image/svg" href="{{ url_for('static', filename='images/logo_sem_fundo.svg') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/base.css') }}">
+    <script defer src="{{ url_for('static', filename='js/script.js') }}"></script>
+</head>
+<body>
+    <header class="main-header">
+        <div class="logo">            
+            <a href="{{ url_for('cardapio') }}">
+                <img src="{{ url_for('static', filename='images/logo_sem_fundo.svg') }}" alt="Logo do Restaurante" class="logo-img">
+                <span>Restaurante Japonês</span>
+            </a>
+        </div>
+
+        <button class="menu-toggle" aria-label="Abrir menu">
+            ☰
+        </button>
+
+        <nav class="nav-links">
+            <ul>
+                <li><a href="{{ url_for('cardapio') }}">Cardápio</a></li>
+                <li><a href="{{ url_for('funcionarios') }}">Funcionário</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+</body>
+</html>

@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Módulo de Funcionários — Restaurante Japonês{% endblock %}
+
+{% block content %}
+    <h1>Módulo de Funcionários</h1>
+
+    <h2>Funcionários Cadastrados</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nome</th>
+                <th>Salário</th>
+                <th>Turno</th>
+                <th>Função</th>
+                <th>Cota Social</th>
+                <th>Último Exame</th>
+                <th>Laudo</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for func in funcionarios %}
+            <tr>
+                <td>{{ func.id_funcionario }}</td>
+                <td>{{ func.nome }}</td>
+                <td>R$ {{ "%.2f"|format(func.salario|float) }}</td>
+                <td>{{ func.turno }}</td>
+                <td>{{ func.funcao }}</td>
+                <td>{{ func.cota_social }}</td>
+                <td>{{ func.data_ultimo_exame or 'N/A' }}</td>
+                <td>{{ func.laudo or 'N/A' }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="8">Nenhum funcionário cadastrado no banco de dados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

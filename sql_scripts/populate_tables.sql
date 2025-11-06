@@ -35,7 +35,6 @@ INSERT INTO item_cardapio (nome_item, categoria, custo_unitario, estoque_minimo,
 ('Refrigerante (Lata)', 'bebida', 4.00, 50, 5),
 ('Suco Natural (Laranja 300ml)', 'bebida', 5.00, 40, 5);
 
-
 --Inserindo cardapios de diferentes dias
 INSERT INTO cardapio (dia, momento, entrada, main_sushi, main_ramen, sobremesa, bebida) VALUES
 ('2025-12-02', 'almoco', 2, 4, 7, 9, 11),
@@ -45,4 +44,38 @@ INSERT INTO cardapio (dia, momento, entrada, main_sushi, main_ramen, sobremesa, 
 ('2025-12-04', 'almoco', 1, 5, 7, 8, 13), 
 ('2025-12-04', 'janta', 2, 4, 6, 10, 11),
 ('2025-12-05', 'almoco', 3, 4, 6, 10, 12), 
-('2025-12-05', 'janta', 3, 5, 7, 9, 13);  
+('2025-12-05', 'janta', 3, 5, 7, 9, 13);
+
+-- Inserir registros na tabela estoque
+INSERT INTO estoque (id_item, quantidade, data_validade) VALUES
+-- Entradas (validade 15 dias)
+(1, 30, CURRENT_DATE + INTERVAL '15 days'),  -- Sunomono
+(2, 45, CURRENT_DATE + INTERVAL '15 days'),  -- Gyoza
+(3, 37, CURRENT_DATE + INTERVAL '15 days'),  -- Edamame
+
+-- Entradas (validade 30 dias)
+(1, 30, CURRENT_DATE + INTERVAL '30 days'),  -- Sunomono
+(2, 45, CURRENT_DATE + INTERVAL '30 days'),  -- Gyoza
+(3, 37, CURRENT_DATE + INTERVAL '30 days'),  -- Edamame
+
+-- Pratos principais (sushi/ramen) - validade 10 dias
+(4, 37, CURRENT_DATE + INTERVAL '10 days'),  -- Sushi
+(5, 45, CURRENT_DATE + INTERVAL '10 days'),  -- Temaki Salmão
+(6, 30, CURRENT_DATE + INTERVAL '10 days'),  -- Yakisoba
+(7, 30, CURRENT_DATE + INTERVAL '10 days'),  -- Ramen
+
+-- Pratos principais (sushi/ramen) - validade 30 dias
+(4, 37, CURRENT_DATE + INTERVAL '30 days'),  -- Sushi
+(5, 45, CURRENT_DATE + INTERVAL '30 days'),  -- Temaki Salmão
+(6, 30, CURRENT_DATE + INTERVAL '30 days'),  -- Yakisoba
+(7, 30, CURRENT_DATE + INTERVAL '30 days'),  -- Ramen
+
+-- Sobremesas (validade 60 dias)
+(8, 60, CURRENT_DATE + INTERVAL '60 days'),  -- Mochi
+(9, 45, CURRENT_DATE + INTERVAL '60 days'),  -- Sorvete de Chá Verde
+(10, 45, CURRENT_DATE + INTERVAL '60 days'), -- Dorayaki
+
+-- Bebidas (validade 180 dias)
+(11, 75, CURRENT_DATE + INTERVAL '180 days'), -- Chá Verde
+(12, 75, CURRENT_DATE + INTERVAL '180 days'), -- Refrigerante
+(13, 60, CURRENT_DATE + INTERVAL '180 days'); -- Suco Natural

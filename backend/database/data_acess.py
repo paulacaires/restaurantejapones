@@ -5,6 +5,7 @@ CLIENTES_VIEW = "vw_clientes_api"
 CLIENTES_TABELA = "cliente"
 FUNCIONARIOS_TABELA = "funcionarios"
 CARDAPIO_TABELA = "cardapio"
+ESTOQUE_TABELA = "estoque"
 
 def buscar_todos_clientes(supabase_client: Client):
     """
@@ -82,3 +83,30 @@ def buscar_todos_cardapios(supabase_client: Client):
     except Exception as e:
         print(f"Erro ao buscar cardápio: {e}")
         return None
+    
+def buscar_todos_itens_estoque(supabase_client: Client):
+    """
+    Função que busca todos os itens do estoque com informações do cardápio.
+
+    Faz uma junção entre as tabelas 'estoque' e 'item_cardapio' usando
+    o relacionamento definido no Supabase (FK id_item).
+    """
+    try:
+        select_query = (
+            "id_estoque, quantidade, data_validade, "
+            "item_cardapio(id_item, nome_item, categoria, custo_unitario, funcionario_responsavel)"
+        )
+        
+        response = (
+            supabase_client.table(ESTOQUE_TABELA)
+            .select(select_query)
+            .order("id_estoque", desc=False)
+            .execute()
+        )
+        
+        return response.data
+
+    except Exception as e:
+        print(f"Erro ao buscar itens do estoque: {e}")
+        return None
+

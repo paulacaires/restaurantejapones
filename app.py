@@ -5,8 +5,10 @@ from dotenv import load_dotenv
 
 from backend.database.data_acess import (
     buscar_todos_funcionarios,
-    buscar_todos_cardapios
-    )
+    buscar_todos_cardapios,
+    buscar_todos_itens_estoque
+)
+
 load_dotenv()
 
 # Inicializar Flask
@@ -49,6 +51,15 @@ def cardapio():
     lista_cardapios = buscar_todos_cardapios(supabase) or []
     
     return render_template('cardapio.html', cardapios=lista_cardapios)
+
+@app.route('/estoque')
+def estoque():
+    if not supabase:
+        return "Erro: Conexão com o banco de dados não estabelecida.", 500
+        
+    lista_estoque = buscar_todos_itens_estoque(supabase) or []
+    
+    return render_template('estoque.html', estoque=lista_estoque)
 
 if __name__ == '__main__':
     app.run(debug=True)

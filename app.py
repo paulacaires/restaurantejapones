@@ -1,65 +1,37 @@
 import os
-from flask import Flask, render_template, url_for
+from flask import Flask, render_template
 from supabase import create_client, Client
 from dotenv import load_dotenv
 
-from backend.database.data_acess import (
-    buscar_todos_funcionarios,
-    buscar_todos_cardapios,
-    buscar_todos_itens_estoque
-)
+# [BLUEPRINTS]
+from routes.estoque_routes import estoque_bp
+from routes.cardapio_routes import cardapio_bp
+from routes.funcionarios_routes import funcionarios_bp
 
-load_dotenv()
+def create_app():
 
-# Inicializar Flask
-app = Flask(__name__)
+    load_dotenv()
 
-# --- Configuração do Supabase ---
-try:
-    url: str = os.environ.get("SUPABASE_URL")
-    key: str = os.environ.get("SUPABASE_KEY")
-    supabase: Client = create_client(url, key)
-except Exception as e:
-    print(f"Erro ao conectar com Supabase: {e}")
-    supabase = None
+    # Inicializar Flask
+    app = Flask(__name__)
 
-@app.route('/')
-def index():
+    # --- Configuração do Supabase ---
+    try:
+        url: str = os.environ.get("SUPABASE_URL")
+        key: str = os.environ.get("SUPABASE_KEY")
+        app.supabase: Client = create_client(url, key)
+    except Exception as e:
+        print(f"Erro ao conectar com Supabase: {e}")
+        app.supabase = None
 
-    #Alterar esse nome com o arquivo do módulo que queira testar ou a tela inicial na fase de implentação
-    return render_template('index.html')
+    # Blueprints
+    app.register_blueprint(estoque_bp)
+    app.register_blueprint(cardapio_bp)
+    app.register_blueprint(funcionarios_bp)
 
-@app.route('/test_patterns')
-def test_patterns():
-    return render_template('test_patterns.html')
+    return app
 
-
-@app.route('/funcionarios', methods=['GET']) 
-def funcionarios():
-    if not supabase:
-        return "Erro: Conexão com o banco de dados não estabelecida.", 500
-
-    lista_funcionarios = buscar_todos_funcionarios(supabase) or []
-    
-    return render_template('funcionarios.html', funcionarios=lista_funcionarios)
-
-@app.route('/cardapio')
-def cardapio():
-    if not supabase:
-        return "Erro: Conexão com o banco de dados não estabelecida.", 500
-        
-    lista_cardapios = buscar_todos_cardapios(supabase) or []
-    
-    return render_template('cardapio.html', cardapios=lista_cardapios)
-
-@app.route('/estoque')
-def estoque():
-    if not supabase:
-        return "Erro: Conexão com o banco de dados não estabelecida.", 500
-        
-    lista_estoque = buscar_todos_itens_estoque(supabase) or []
-    
-    return render_template('estoque.html', estoque=lista_estoque)
-
-if __name__ == '__main__':
+# Para rodar localmente
+if __name__ == "__main__":
+    app = create_app()
     app.run(debug=True)

@@ -3,44 +3,51 @@
 {% block title %}Módulo de Estoque{% endblock %}
 
 {% block content %}
-<h1>Módulo de Controle de Estoque</h1>
 
-<h2>Itens em Estoque</h2>
+<div class="estoque-page">
 
-<table>
-    <thead>
-        <tr>
-            <th>ID Estoque</th>
-            <th>Nome do Item</th>
-            <th>Categoria</th>
-            <th>Quantidade</th>
-            <th>Data de Validade</th>
-            <th>Custo Unitário (R$)</th>
-            <th>Funcionário Responsável</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for item in estoque %}
-        <tr>
-            <td>{{ item.id_estoque }}</td>
-            <td>{{ item.item_cardapio.nome_item }}</td>
-            <td>{{ item.item_cardapio.categoria }}</td>
-            <td>{{ item.quantidade }}</td>
-            <td>
-                {% if item.data_validade %}
-                    {{ item.data_validade | replace("-", "/") }}
-                {% else %}
-                    Sem validade
-                {% endif %}
+    <h1>Módulo de Controle de Estoque</h1>
+
+    <h2>Itens em Estoque</h2>
+
+    <table class="tabela-estoque">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Quantidade</th>
+                <th>Data de Validade</th>
+                <th>Custo Unitário (R$)</th>
+                <th>Funcionário Responsável</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in estoque %}
+            <tr>
+            <td class="estoque-item-info">
+                <span class="categoria">{{ item.item_cardapio.categoria }}</span>
+                <span class="nome">{{ item.item_cardapio.nome_item }}</span>
+                <span class="id">#{{ item.id_estoque }}</span>
             </td>
-            <td>{{ item.item_cardapio.custo_unitario }}</td>
-            <td>{{ item.item_cardapio.funcionario_responsavel }}</td>
-        </tr>
-        {% else %}
-        <tr>
-            <td colspan="7">Nenhum item cadastrado no estoque.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+
+                <td>{{ item.quantidade }}</td>
+                <td>
+                    {% if item.data_validade %}
+                        {{ item.data_validade | replace("-", "/") }}
+                    {% else %}
+                        Sem validade
+                    {% endif %}
+                </td>
+                <td>{{ item.item_cardapio.custo_unitario }}</td>
+                <td>{{ item.item_cardapio.funcionario_responsavel }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="7">Nenhum item cadastrado no estoque.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+
 {% endblock %}

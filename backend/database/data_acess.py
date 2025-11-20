@@ -37,8 +37,7 @@ def adicionar_novo_cliente(supabase_client: Client, dados_cliente: dict):
     except Exception as e:
         print(f"Erro ao adicionar cliente: {e}")
         return None
-    
-
+   
 def buscar_todos_funcionarios(supabase_client: Client):
     """
     Função que busca todos os funcionários (implementação estática).
@@ -51,7 +50,6 @@ def buscar_todos_funcionarios(supabase_client: Client):
         print(f"Erro ao buscar funcionários: {e}")
         return None
     
-
 def buscar_todos_cardapios(supabase_client: Client):
     """
     Função que busca todos os cardápios .
@@ -108,5 +106,28 @@ def buscar_todos_itens_estoque(supabase_client: Client):
 
     except Exception as e:
         print(f"Erro ao buscar itens do estoque: {e}")
+        return None
+
+def buscar_id_item_por_nome(supabase_client, nome_item: str):
+    """
+    Retorna o ID do item no cardápio com base no nome.
+    Se não encontrar, retorna None.
+    """
+    try:
+        response = (
+            supabase_client
+            .table("item_cardapio")
+            .select("id_item")
+            .eq("nome_item", nome_item)
+            .limit(1)
+            .execute()
+        )
+
+        if response.data:
+            return response.data[0]["id_item"]
+        return None
+
+    except Exception as e:
+        print(f"Erro ao buscar id do item '{nome_item}': {e}")
         return None
 

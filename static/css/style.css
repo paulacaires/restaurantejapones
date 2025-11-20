@@ -80,3 +80,76 @@ table th {
     border-radius: 4px;
     box-sizing: border-box;
 }
+
+tr:hover td {
+    background: color-mix(in srgb, var(--cor-texto) 10%, transparent);
+}
+
+/* ============================== */
+/* Estilos exclusivos de estoque  */
+/* ============================== */
+
+.tabela-estoque {
+    border-collapse: separate;
+    border-spacing: 0;
+    background: white;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.06);
+    margin-top: 20px;
+    font-family: var(--fonte-principal);
+}
+
+/* Cabeçalho */
+.tabela-estoque th {
+    background: var(--cor-secundaria);
+    padding: 12px 14px;
+    font-weight: bold;
+    color: var(--cor-texto);
+    border-bottom: 1px solid #ddd;
+}
+
+/* Células */
+.tabela-estoque td {
+    padding: 14px 16px;
+    vertical-align: middle;
+    background: white;
+    border-bottom: 1px solid #eee;
+}
+
+/* ================================ */
+/* Coluna combinada: item + cat + ID */
+/* ================================ */
+
+.tabela-estoque td.estoque-item-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Nome do item (elemento principal) */
+.tabela-estoque td.estoque-item-info .nome {
+    font-weight: bold;
+    font-size: 1rem;
+    color: var(--cor-texto);
+}
+
+/* Categoria como TAG */
+.tabela-estoque td.estoque-item-info .categoria {
+    background: color-mix(in srgb, var(--cor-primaria) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--cor-primaria) 25%, transparent);
+    padding: 3px 8px;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    color: var(--cor-primaria);
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+/* Para a informação de ID ser sutil */
+.tabela-estoque td.estoque-item-info .id {
+    margin-left: auto;
+    font-size: 0.75rem;
+    opacity: 0.4;
+    color: var(--cor-texto);
+}

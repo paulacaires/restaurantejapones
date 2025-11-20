@@ -19,10 +19,10 @@ ESTOQUE_TABELA = "estoque"
 # Criação do blueprint
 estoque_bp = Blueprint("estoque", __name__)
 
-supabase = current_app.supabase
-
 @estoque_bp.route("/estoque", methods=["GET"])
 def estoque():
+    supabase = current_app.supabase
+
     if not supabase:
         return "Erro: Conexão com o banco de dados não estabelecida.", 500
         
@@ -32,6 +32,7 @@ def estoque():
 
 @estoque_bp.route("/estoque/adicionar", methods=["POST"])
 def adicionar_item_estoque():
+    supabase = current_app.supabase
     if not supabase:
         flash("Erro ao conectar ao banco de dados.", "erro")
         return redirect(url_for("estoque.estoque"))

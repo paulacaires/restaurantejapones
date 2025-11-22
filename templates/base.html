@@ -33,20 +33,30 @@
     </header>
 
     <main>
-        {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div class="flash-container">
-            {% for category, msg in messages %}
-                <div class="flash flash-{{ category }}">
-                {{ msg }}
-                </div>
-            {% endfor %}
-            </div>
-        {% endif %}
-        {% endwith %}
-
         {% block content %}{% endblock %}
     </main>
 
+    <!-- Flash Toasts -->
+    <div class="flash-container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, msg in messages %}
+                    <div class="flash-toast {{ category }}">
+                        {{ msg }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
 </body>
 </html>
+
+<script>
+    // Remove automaticamente após segundos
+    setTimeout(() => {
+        document.querySelectorAll(".flash-toast").forEach(t => {
+            t.classList.add("hide");
+            setTimeout(() => t.remove(), 500);
+        });
+    }, 3000);
+</script>

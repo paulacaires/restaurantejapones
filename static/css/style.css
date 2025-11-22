@@ -354,31 +354,75 @@ tr:hover td {
 /* Exemplo: Ingredientes insuficientes para cardápio
 /* ================================== */
 
+/* =========================== */
+/*        FLASH TOASTS         */
+/* =========================== */
+
 .flash-container {
-    margin-bottom: 20px;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 999999;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
-.flash {
-    padding: 12px 16px;
-    border-radius: 8px;
-    font-weight: bold;
+/* Estilo base */
+.flash-toast {
+    padding: 14px 20px;
+    border-radius: 12px;
+    color: white;
     font-size: 15px;
-    animation: fadeIn 0.3s ease;
+    font-weight: 500;
+    min-width: 260px;
+    max-width: 360px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+    backdrop-filter: blur(6px);
+
+    animation: toastIn 0.35s ease forwards;
+    opacity: 0;
+    transform: translateX(30px);
 }
 
-.flash-erro {
-    background-color: #ffebee;
-    color: #c62828;
-    border: 1px solid #c62828;
+/* Categorias */
+.flash-toast.sucesso {
+    background: #28a745;
 }
 
-.flash-sucesso {
-    background-color: #e8f5e9;
-    color: #2e7d32;
-    border: 1px solid #2e7d32;
+.flash-toast.erro {
+    background: #dc3545;
 }
 
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-4px); }
-    to   { opacity: 1; transform: translateY(0); }
+.flash-toast.aviso {
+    background: #ffc107;
+    color: #332800;
+}
+
+/* Animação de entrada */
+@keyframes toastIn {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+/* Animação de saída */
+.flash-toast.hide {
+    animation: toastOut 0.45s ease forwards;
+}
+
+@keyframes toastOut {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(30px);
+    }
 }

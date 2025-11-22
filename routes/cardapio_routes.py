@@ -25,3 +25,5 @@ def cardapio():
     lista_cardapios = buscar_todos_cardapios(supabase) or []
 
     return render_template("cardapio.html", cardapios=lista_cardapios)
+
+

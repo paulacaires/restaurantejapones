@@ -5,6 +5,7 @@ CLIENTES_VIEW = "vw_clientes_api"
 CLIENTES_TABELA = "cliente"
 FUNCIONARIOS_TABELA = "funcionarios"
 CARDAPIO_TABELA = "cardapio"
+ITEM_CARDAPIO_TABELA = "item_cardapio"
 ESTOQUE_TABELA = "estoque"
 
 def buscar_todos_clientes(supabase_client: Client):
@@ -82,6 +83,30 @@ def buscar_todos_cardapios(supabase_client: Client):
         print(f"Erro ao buscar cardápio: {e}")
         return None
     
+def buscar_itens_cardapio(supabase_client: Client):
+    """
+    Função que busca todos os itens do cardápio (recuperando o id_item e o nome).
+    Lembrando que itens do cardápio é diferente de cardápio.
+    """
+    try:
+        select_query = (
+            "id_item, nome_item"
+        )
+        
+        response = (
+            supabase_client.table(ITEM_CARDAPIO_TABELA)
+            .select(select_query)
+            .execute()
+        )
+
+        print('Itens!', response.data)
+        
+        return response.data
+        
+    except Exception as e:
+        print(f"Erro ao listar os itens do cardápio (lembrando que é diferente de cardápio): {e}")
+        return None
+    
 def buscar_todos_itens_estoque(supabase_client: Client):
     """
     Função que busca todos os itens do estoque com informações do cardápio.
@@ -107,27 +132,3 @@ def buscar_todos_itens_estoque(supabase_client: Client):
     except Exception as e:
         print(f"Erro ao buscar itens do estoque: {e}")
         return None
-
-def buscar_id_item_por_nome(supabase_client, nome_item: str):
-    """
-    Retorna o ID do item no cardápio com base no nome.
-    Se não encontrar, retorna None.
-    """
-    try:
-        response = (
-            supabase_client
-            .table("item_cardapio")
-            .select("id_item")
-            .eq("nome_item", nome_item)
-            .limit(1)
-            .execute()
-        )
-
-        if response.data:
-            return response.data[0]["id_item"]
-        return None
-
-    except Exception as e:
-        print(f"Erro ao buscar id do item '{nome_item}': {e}")
-        return None
-

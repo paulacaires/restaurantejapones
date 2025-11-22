@@ -10,7 +10,7 @@ from flask import (
 
 from backend.database.data_acess import (
     buscar_todos_itens_estoque,
-    buscar_id_item_por_nome
+    buscar_itens_cardapio
 )
 
 # Nome das tabelas no Supabase
@@ -27,8 +27,13 @@ def estoque():
         return "Erro: Conexão com o banco de dados não estabelecida.", 500
         
     lista_estoque = buscar_todos_itens_estoque(supabase) or []
-    
-    return render_template('estoque.html', estoque=lista_estoque)
+    itens_cardapio = buscar_itens_cardapio(supabase) or []
+
+    return render_template(
+        "estoque.html",
+        estoque=lista_estoque,
+        itens_cardapio=itens_cardapio
+    )
 
 @estoque_bp.route("/estoque/adicionar", methods=["POST"])
 def adicionar_item_estoque():
@@ -44,7 +49,7 @@ def adicionar_item_estoque():
         data_validade   = request.form.get("data_validade")
 
         # Com base no nome, recuperar o ID do item do cardápio
-        id_item = buscar_id_item_por_nome(supabase, nome_item)
+        # id_item = buscar_id_item_por_nome(supabase, nome_item)
 
         # Validações básicas
         if not nome_item or not quantidade or not data_validade:

@@ -90,7 +90,7 @@ def buscar_itens_cardapio(supabase_client: Client):
     """
     try:
         select_query = (
-            "id_item, nome_item"
+            "id_item, nome_item, categoria",
         )
         
         response = (

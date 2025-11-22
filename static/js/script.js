@@ -9,7 +9,11 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 function abrirModalEstoque() {
-    document.getElementById("modalEstoque").classList.add("ativo");
+  document.getElementById("modalEstoque").classList.add("ativo");
+}
+
+function abrirModalCardapio() {
+  document.getElementById("modalCardapio").classList.add("ativo");
 }
 
 function fecharModalEstoque(event) {

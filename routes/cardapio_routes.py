@@ -5,7 +5,8 @@ from flask import (
 )
 
 from backend.database.data_acess import (
-  buscar_todos_cardapios
+  buscar_todos_cardapios,
+  buscar_itens_cardapio
 )
 
 # Nome da tabela no Supabase
@@ -23,7 +24,10 @@ def cardapio():
         return "Erro: Conexão com o banco de dados não estabelecida.", 500
 
     lista_cardapios = buscar_todos_cardapios(supabase) or []
+    itens_cardapio = buscar_itens_cardapio(supabase) or []
 
-    return render_template("cardapio.html", cardapios=lista_cardapios)
+    return render_template("cardapio.html", 
+                           cardapios=lista_cardapios,
+                           itens_cardapio=itens_cardapio)
 
 

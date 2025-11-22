@@ -214,6 +214,20 @@ tr:hover td {
     transform: scale(0.85);
     opacity: 0;
     animation: aparecerModal 0.25s ease forwards;
+
+    max-height: 90vh;        /* impede de ultrapassar a tela */
+    overflow-y: auto;        /* ativa scroll vertical quando necessário */
+    scrollbar-width: thin;   /* scroll mais bonito no Firefox */
+}
+
+/* Scroll mais fino no Chrome */
+.modal-conteudo::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-conteudo::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
 }
 
 /* Animação suave estilo pop-up japonês */
@@ -234,3 +248,104 @@ tr:hover td {
 .linha-estoque-baixo {
     background-color: #ffe4e4 !important;
 }
+
+/* ================================== */
+/* Indicativo de aumento de demanda   */
+/* ================================== */
+
+.checkbox-demanda {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    user-select: none;
+    position: relative;
+    gap: 6px;
+}
+
+/* Esconde o checkbox original */
+.checkbox-label input {
+    display: none;
+}
+
+/* Estilo do checkmark */
+.checkmark {
+    width: 18px;
+    height: 18px;
+    border: 2px solid var(--cor-primaria, #333);
+    border-radius: 4px;
+    display: inline-block;
+    position: relative;
+}
+
+/* Check ativo */
+.checkbox-label input:checked + .checkmark {
+    background-color: var(--cor-primaria, #333);
+}
+
+.checkbox-label input:checked + .checkmark::after {
+    content: "✔";
+    color: white;
+    font-size: 12px;
+    position: absolute;
+    top: -2px;
+    left: 2px;
+}
+
+/* Tooltip container */
+.tooltip-demanda {
+    position: relative;
+    display: inline-block;
+    cursor: help;
+    opacity: 0.8;
+    font-weight: bold;
+}
+
+/* Tooltip escondido */
+.tooltip-demanda .tooltip-text {
+    visibility: hidden;
+    opacity: 0;
+
+    width: 220px;
+    background-color: var(--cor-texto);
+    color: white;
+    text-align: left;
+    padding: 8px 10px;
+    border-radius: 6px;
+
+    position: absolute;
+    z-index: 999999;
+
+    bottom: 130%;       /* <-- ESSENCIAL */
+    left: 50%;
+    transform: translateX(-50%);
+
+    transition: opacity 0.2s ease;
+
+    font-size: 13px;
+    line-height: 1.3;
+}
+
+/* Triângulo */
+.tooltip-demanda .tooltip-text::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 6px;
+    border-style: solid;
+    border-color: var(--cor-texto) transparent transparent transparent;
+}
+
+/* Mostrar tooltip */
+.tooltip-demanda:hover .tooltip-text {
+    visibility: visible;
+    opacity: 1;
+}
+

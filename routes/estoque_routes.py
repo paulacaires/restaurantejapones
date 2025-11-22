@@ -55,7 +55,7 @@ def adicionar_item_estoque():
 
         # Validações básicas
         if not id_item or not quantidade or not data_validade:
-            flash("Preencha todos os campos antes de continuar.", "aviso")
+            flash("Preencha todos os campos.", "aviso")
             return redirect(url_for("estoque.estoque"))
 
         payload = {
@@ -74,30 +74,36 @@ def adicionar_item_estoque():
         )
 
         # Se já existe um registro no estoque para esse item
-        if response and response.data:
+        if response:
             id_estoque = response.data["id_estoque"]
             quantidade_atual = response.data["quantidade"]
 
             nova_quantidade = int(quantidade_atual) + int(quantidade)
 
-            # Atualizar quantidade e validade
-            supabase.table(ESTOQUE_TABELA).update({
-                "quantidade": nova_quantidade,
-                "data_validade": data_validade
-            }).eq("id_estoque", id_estoque).execute()
-
-            flash(f"Estoque atualizado com sucesso! Quantidade atual: {nova_quantidade}.", "sucesso")
+            # Atualizar quantidade e sobreescreve a validade
+            update_resp = (
+                supabase.table(ESTOQUE_TABELA)
+                .update({
+                    "quantidade": nova_quantidade,
+                    "data_validade": data_validade
+                })
+                .eq("id_estoque", id_estoque)
+                .execute()
+            )
 
         else:
-            # Criar novo registro
-            supabase.table(ESTOQUE_TABELA).insert({
-                "id_item": id_item,
-                "quantidade": quantidade,
-                "data_validade": data_validade,
-            }).execute()
+            # Não existe um registro para esse item em estoque
+            insert_resp = (
+                supabase.table(ESTOQUE_TABELA)
+                .insert({
+                    "id_item": id_item,
+                    "quantidade": quantidade,
+                    "data_validade": data_validade,
+                })
+                .execute()
+            )
 
-            flash("Item adicionado ao estoque com sucesso!", "sucesso")
-
+        flash("Item adicionado ao estoque com sucesso!", "sucesso")
         return redirect(url_for("estoque.estoque"))
         
     except Exception as e:

@@ -14,6 +14,7 @@ def create_app():
 
     # Inicializar Flask
     app = Flask(__name__)
+    app.secret_key = os.urandom(24)
 
     # --- Configuração do Supabase ---
     try:

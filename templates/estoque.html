@@ -5,8 +5,24 @@
 {% block content %}
 
 <div class="estoque-page">
-
     <h1>Módulo de Controle de Estoque</h1>
+
+    <!-- ALERTA GLOBAL DE ESTOQUE BAIXO -->
+    {% if itens_alerta %}
+        <div class="alert alert-danger" style="margin-bottom: 20px; padding: 15px; border-radius: 8px;">
+            <strong>Atenção!</strong> Alguns itens estão abaixo da quantidade mínima:
+            <ul style="margin-top: 10px;">
+                {% for item in itens_alerta %}
+                    <li>
+                        {{ item.item_cardapio.nome_item }} — disponível:
+                        {{ item.quantidade }}, mínimo:
+                        {{ item.item_cardapio.estoque_minimo }}
+                    </li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+    <!-- FIM ALERTA GLOBAL -->
 
     <h2>Itens em Estoque</h2>
 
@@ -22,14 +38,25 @@
         </thead>
         <tbody>
             {% for item in estoque %}
-            <tr>
-            <td class="estoque-item-info">
-                <span class="categoria">{{ item.item_cardapio.categoria }}</span>
-                <span class="nome">{{ item.item_cardapio.nome_item }}</span>
-                <span class="id">#{{ item.id_estoque }}</span>
-            </td>
 
-                <td>{{ item.quantidade }}</td>
+            <!-- Destaque visual quando estiver abaixo do mínimo -->
+            <tr class="{% if item.quantidade < item.item_cardapio.estoque_minimo %}linha-estoque-baixo{% endif %}">
+
+                <td class="estoque-item-info">
+                    <span class="categoria">{{ item.item_cardapio.categoria }}</span>
+                    <span class="nome">{{ item.item_cardapio.nome_item }}</span>
+                    <span class="id">#{{ item.id_estoque }}</span>
+                </td>
+
+                <td>
+                    {{ item.quantidade }}
+
+                    <!-- Ícone de alerta -->
+                    {% if item.quantidade < item.item_cardapio.estoque_minimo %}
+                        <span>⚠️</span>
+                    {% endif %}
+                </td>
+
                 <td>
                     {% if item.data_validade %}
                         {{ item.data_validade | replace("-", "/") }}
@@ -37,9 +64,11 @@
                         Sem validade
                     {% endif %}
                 </td>
+
                 <td>{{ item.item_cardapio.custo_unitario }}</td>
                 <td>{{ item.item_cardapio.funcionario_responsavel.nome }}</td>
             </tr>
+
             {% else %}
             <tr>
                 <td colspan="7">Nenhum item cadastrado no estoque.</td>

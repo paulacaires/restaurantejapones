@@ -90,7 +90,7 @@ def buscar_itens_cardapio(supabase_client: Client):
     """
     try:
         select_query = (
-            "id_item, nome_item"
+            "id_item, nome_item, categoria",
         )
         
         response = (
@@ -116,7 +116,7 @@ def buscar_todos_itens_estoque(supabase_client: Client):
         select_query = (
             "id_estoque, quantidade, data_validade, "
             "item_cardapio("
-            "   id_item, nome_item, categoria, custo_unitario, "
+            "   id_item, nome_item, categoria, custo_unitario, estoque_minimo,"
             "   funcionario_responsavel(nome)"
             ")"
         )
@@ -133,3 +133,15 @@ def buscar_todos_itens_estoque(supabase_client: Client):
     except Exception as e:
         print(f"Erro ao buscar itens do estoque: {e}")
         return None
+
+def verificar_baixo_estoque(estoque):
+    itens_alerta = []
+    for item in estoque:
+        qtd_atual = item["quantidade"]
+        qtd_min = item["item_cardapio"]["estoque_minimo"]
+
+        if qtd_min is not None and qtd_atual < qtd_min:
+            itens_alerta.append(item)
+
+    return itens_alerta
+

@@ -3,38 +3,153 @@
 {% block title %}Módulo de Cardápio{% endblock %}
 
 {% block content %}
-<h1>Módulo de Cardápio Diário</h1>
 
-<h2>Cardápios Cadastrados</h2>
+<div class="cardapio-page">
 
-<table>
-    <thead>
-        <tr>
-            <th>Dia</th>
-            <th>Momento</th>
-            <th>Entrada</th>
-            <th>Sushi Bar (Main)</th>
-            <th>Ramen (Main)</th>
-            <th>Sobremesa</th>
-            <th>Bebida</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for item in cardapios %}
-        <tr>
-            <td>{{ item.dia }}</td>
-            <td>{{ item.momento }}</td>
-            <td>{{ item.entrada.nome_item }}</td>
-            <td>{{ item.main_sushi.nome_item if item.main_sushi else 'N/A' }}</td>
-            <td>{{ item.main_ramen.nome_item if item.main_ramen else 'N/A' }}</td>
-            <td>{{ item.sobremesa.nome_item if item.sobremesa else 'N/A' }}</td>
-            <td>{{ item.bebida.nome_item if item.bebida else 'N/A' }}</td>
-        </tr>
-        {% else %}
-        <tr>
-            <td colspan="7">Nenhum cardápio cadastrado no banco de dados.</td>
-        </tr>
-        {% endfor %}
-    </tbody>
-</table>
+    <h1>Módulo de Cardápio Diário</h1>
+
+    <h2>Cardápios Cadastrados</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Dia</th>
+                <th>Momento</th>
+                <th>Entrada</th>
+                <th>Sushi Bar (Main)</th>
+                <th>Ramen (Main)</th>
+                <th>Sobremesa</th>
+                <th>Bebida</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in cardapios %}
+            <tr>
+                <td>{{ item.dia }}</td>
+                <td>{{ item.momento }}</td>
+                <td>{{ item.entrada.nome_item }}</td>
+                <td>{{ item.main_sushi.nome_item if item.main_sushi else 'N/A' }}</td>
+                <td>{{ item.main_ramen.nome_item if item.main_ramen else 'N/A' }}</td>
+                <td>{{ item.sobremesa.nome_item if item.sobremesa else 'N/A' }}</td>
+                <td>{{ item.bebida.nome_item if item.bebida else 'N/A' }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="7">Nenhum cardápio cadastrado no banco de dados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn-flutuante" onclick="abrirModalCardapio()">+</a>
+
+    <!-- Modal -->
+    <div id="modalCardapio" class="modal-overlay" onclick="fecharModalEstoque(event)">
+        <div class="modal-conteudo">
+            <h2>Cadastro de um Cardápio</h2>
+
+            <form action="{{ url_for('cardapio.adicionar_cardapio') }}" method="post">
+
+                <!-- 1. Selecionar data do cardápio -->
+                <div class="form-group">
+                    <label for="data_cardapio">Data do Cardápio</label>
+                    <input type="date" name="data_cardapio" class="form-control" required>
+                </div>
+
+                <!-- 2. Selecionar turno (almoço / janta) -->
+                <div class="form-group">
+                    <label for="turno">Turno</label>
+                    <select name="turno" class="form-control" required>
+                        <option value="almoco">Almoço</option>
+                        <option value="janta">Janta</option>
+                    </select>
+                </div>
+
+                <hr>
+
+                <!-- 3. Entrada -->
+                <div class="form-group">
+                    <label for="entrada">Entrada</label>
+                    <select name="entrada" class="form-control" required>
+                        <option value="">Selecione...</option>
+                        {% for item in itens_cardapio if item.categoria == "entrada" %}
+                            <option value="{{ item.id_item }}">{{ item.nome_item }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- 4. Main Sushi -->
+                <div class="form-group">
+                    <label for="main_sushi">Prato Principal (Sushi)</label>
+                    <select name="main_sushi" class="form-control" required>
+                        <option value="">Selecione...</option>
+                        {% for item in itens_cardapio if item.categoria == "main_sushi" %}
+                            <option value="{{ item.id_item }}">{{ item.nome_item }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- 5. Main Ramen -->
+                <div class="form-group">
+                    <label for="main_ramen">Prato Principal (Ramen)</label>
+                    <select name="main_ramen" class="form-control" required>
+                        <option value="">Selecione...</option>
+                        {% for item in itens_cardapio if item.categoria == "main_ramen" %}
+                            <option value="{{ item.id_item }}">{{ item.nome_item }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- 6. Sobremesa -->
+                <div class="form-group">
+                    <label for="sobremesa">Sobremesa</label>
+                    <select name="sobremesa" class="form-control" required>
+                        <option value="">Selecione...</option>
+                        {% for item in itens_cardapio if item.categoria == "sobremesa" %}
+                            <option value="{{ item.id_item }}">{{ item.nome_item }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- 7. Bebida -->
+                <div class="form-group">
+                    <label for="bebida">Bebida</label>
+                    <select name="bebida" class="form-control" required>
+                        <option value="">Selecione...</option>
+                        {% for item in itens_cardapio if item.categoria == "bebida" %}
+                            <option value="{{ item.id_item }}">{{ item.nome_item }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <!-- 8. Aumento de Demanda -->
+                <div class="form-group checkbox-demanda">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="aumento_demanda" value="true">
+                        <span class="checkmark"></span>
+                        Aumento de Demanda
+                    </label>
+
+                    <span class="tooltip-demanda">
+                        ⓘ
+                        <span class="tooltip-text">
+                            Use isto quando você prevê maior movimento no restaurante, por exemplo: eventos ou reservas maiores. Isso ajustará o cálculo futuro de insumos.
+                        </span>
+                    </span>
+                </div>
+
+                <br>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    Adicionar Cardápio
+                </button>
+
+            </form>
+        </div>
+    </div>
+
+</div>
+
 {% endblock %}
+
+</script>

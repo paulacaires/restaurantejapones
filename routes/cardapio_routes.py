@@ -40,6 +40,7 @@ def adicionar_cardapio():
     supabase = current_app.supabase
 
     if not supabase:
+        flash("Conexão com o banco não encontrada.", "erro")
         return redirect(url_for("cardapio.cardapio"))
 
     try:
@@ -69,6 +70,7 @@ def adicionar_cardapio():
         )
 
         if duplicado.data:
+            flash("⚠️ Já existe um cardápio cadastrado para essa data e turno!", "erro")
             print('Já existe duplicado!')
             return redirect(url_for("cardapio.cardapio"))
 
@@ -131,7 +133,7 @@ def adicionar_cardapio():
                 nome = info_por_id[id_item]["nome_item"]
                 msg += f"- {nome}: tem {estoque_atual}, precisa de {necessario}\n"
 
-            flash(f"🍣 Faltam ingredientes para montar o cardápio: {msg}.", "erro")
+            flash(f"🍣 Faltam ingredientes para montar o cardápio:\n{msg}", "erro")
             return redirect(url_for("cardapio.cardapio"))
 
         # ---------------------------
@@ -144,8 +146,7 @@ def adicionar_cardapio():
             "main_sushi": main_sushi,
             "main_ramen": main_ramen,
             "sobremesa": sobremesa,
-            "bebida": bebida,
-            "aumento_demanda": aumento_demanda
+            "bebida": bebida
         }
 
         supabase.table(CARDAPIO_TABELA).insert(payload).execute()
@@ -159,10 +160,10 @@ def adicionar_cardapio():
 
             supabase.table("estoque").update({"quantidade": novo_estoque}).eq("id_item", item_id).execute()
 
+        flash("✅ Cardápio adicionado com sucesso!", "sucesso")
         return redirect(url_for("cardapio.cardapio"))
 
     except Exception as e:
+        flash("❌ Ocorreu um erro ao adicionar o cardápio.", "erro")
         print(f"Erro ao adicionar cardápio: {e}")
         return redirect(url_for("cardapio.cardapio"))
-
-

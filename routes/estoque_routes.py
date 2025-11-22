@@ -44,31 +44,29 @@ def adicionar_item_estoque():
 
     try:
         # Dados enviados pelo form
-        nome_item       = request.form.get("nome_item")
+        id_item       = request.form.get("id_item")
         quantidade      = request.form.get("quantidade")
         data_validade   = request.form.get("data_validade")
 
-        # Com base no nome, recuperar o ID do item do cardápio
-        # id_item = buscar_id_item_por_nome(supabase, nome_item)
-
         # Validações básicas
-        if not nome_item or not quantidade or not data_validade:
+        if not id_item or not quantidade or not data_validade:
             flash("Por favor, selecione o item e informe a quantidade.", "erro")
             return redirect(url_for("estoque.estoque"))
         
-        # Montagem do registro
-        novo_item = {
+        payload = {
             "id_item": int(id_item),
-            "quantidade": float(quantidade),
-            "data_validade": data_validade if data_validade else None,
+            "quantidade": int(quantidade),
+            "data_validade": data_validade
         }
 
-        supabase.table(ESTOQUE_TABELA).insert(novo_item).execute()
+        response = supabase.table(ESTOQUE_TABELA).insert(payload).execute()
 
-        flash("Item adicionado ao estoque com sucesso!", "sucesso")
-        return redirect(url_for("estoque.estoque"))
+        if response.data:
+            print(response.data[0])
+            return redirect(url_for("estoque.estoque"))
+    
+        return None  # deu algum erro silencioso
 
     except Exception as e:
         print(f"Erro ao adicionar item ao estoque: {e}")
-        flash("Erro ao adicionar item ao estoque.", "erro")
         return redirect(url_for("estoque.estoque"))

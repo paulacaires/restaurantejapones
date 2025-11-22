@@ -99,8 +99,6 @@ def buscar_itens_cardapio(supabase_client: Client):
             .execute()
         )
 
-        print('Itens!', response.data)
-        
         return response.data
         
     except Exception as e:

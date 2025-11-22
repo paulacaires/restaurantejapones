@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block title %}Módulo de Estoque{% endblock %}
+
+{% block content %}
+
+<div class="estoque-page">
+
+    <h1>Módulo de Controle de Estoque</h1>
+
+    <h2>Itens em Estoque</h2>
+
+    <table class="tabela-estoque">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Quantidade</th>
+                <th>Data de Validade</th>
+                <th>Custo Unitário (R$)</th>
+                <th>Funcionário Responsável</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in estoque %}
+            <tr>
+            <td class="estoque-item-info">
+                <span class="categoria">{{ item.item_cardapio.categoria }}</span>
+                <span class="nome">{{ item.item_cardapio.nome_item }}</span>
+                <span class="id">#{{ item.id_estoque }}</span>
+            </td>
+
+                <td>{{ item.quantidade }}</td>
+                <td>
+                    {% if item.data_validade %}
+                        {{ item.data_validade | replace("-", "/") }}
+                    {% else %}
+                        Sem validade
+                    {% endif %}
+                </td>
+                <td>{{ item.item_cardapio.custo_unitario }}</td>
+                <td>{{ item.item_cardapio.funcionario_responsavel.nome }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="7">Nenhum item cadastrado no estoque.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn-flutuante" onclick="abrirModalEstoque()">+</a>
+
+    <!-- Modal -->
+    <div id="modalEstoque" class="modal-overlay" onclick="fecharModalEstoque(event)">
+        <div class="modal-conteudo">
+            <h2>Cadastro de item no estoque</h2>
+
+            <form action="{{ url_for('estoque.adicionar_item_estoque') }}" method="post">
+
+                <div class="form-group">
+                    <label for="id_item">Item do Cardápio</label>
+                    <select name="id_item" required class="form-control">
+                        {% for item in itens_cardapio %}
+                            <option value="{{ item.id_item }}">{{ item.nome_item }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="quantidade">Quantidade</label>
+                    <input type="number" name="quantidade" class="form-control" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="data_validade">Data de Validade</label>
+                    <input type="date" name="data_validade" class="form-control">
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">Adicionar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

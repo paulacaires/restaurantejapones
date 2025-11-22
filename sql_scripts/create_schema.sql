@@ -69,6 +69,23 @@ CREATE TABLE estoque (
   data_validade DATE
 );
 
+/*
+CREATE TABLE estoque (
+  id_estoque BIGSERIAL PRIMARY KEY,
+  
+  id_item BIGINT NOT NULL,
+  
+  quantidade NUMERIC(12,3) NOT NULL CHECK (quantidade >= 0),
+  data_validade DATE,
+  
+  -- Constraint nomeada para a FK
+  CONSTRAINT fk_estoque_item_cardapio
+    FOREIGN KEY (id_item)
+    REFERENCES item_cardapio (id_item)
+    ON DELETE CASCADE
+);
+*/
+
 -- Tabela Cardápio
 CREATE TABLE cardapio (
   id_cardapio BIGSERIAL PRIMARY KEY,

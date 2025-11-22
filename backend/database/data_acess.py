@@ -5,6 +5,8 @@ CLIENTES_VIEW = "vw_clientes_api"
 CLIENTES_TABELA = "cliente"
 FUNCIONARIOS_TABELA = "funcionarios"
 CARDAPIO_TABELA = "cardapio"
+ITEM_CARDAPIO_TABELA = "item_cardapio"
+ESTOQUE_TABELA = "estoque"
 
 def buscar_todos_clientes(supabase_client: Client):
     """
@@ -36,8 +38,7 @@ def adicionar_novo_cliente(supabase_client: Client, dados_cliente: dict):
     except Exception as e:
         print(f"Erro ao adicionar cliente: {e}")
         return None
-    
-
+   
 def buscar_todos_funcionarios(supabase_client: Client):
     """
     Função que busca todos os funcionários (implementação estática).
@@ -50,7 +51,6 @@ def buscar_todos_funcionarios(supabase_client: Client):
         print(f"Erro ao buscar funcionários: {e}")
         return None
     
-
 def buscar_todos_cardapios(supabase_client: Client):
     """
     Função que busca todos os cardápios .
@@ -81,4 +81,55 @@ def buscar_todos_cardapios(supabase_client: Client):
         
     except Exception as e:
         print(f"Erro ao buscar cardápio: {e}")
+        return None
+    
+def buscar_itens_cardapio(supabase_client: Client):
+    """
+    Função que busca todos os itens do cardápio (recuperando o id_item e o nome).
+    Lembrando que itens do cardápio é diferente de cardápio.
+    """
+    try:
+        select_query = (
+            "id_item, nome_item"
+        )
+        
+        response = (
+            supabase_client.table(ITEM_CARDAPIO_TABELA)
+            .select(select_query)
+            .execute()
+        )
+
+        return response.data
+        
+    except Exception as e:
+        print(f"Erro ao listar os itens do cardápio (lembrando que é diferente de cardápio): {e}")
+        return None
+    
+def buscar_todos_itens_estoque(supabase_client: Client):
+    """
+    Função que busca todos os itens do estoque com informações do cardápio.
+
+    Faz uma junção entre as tabelas 'estoque' e 'item_cardapio' usando
+    o relacionamento definido no Supabase (FK id_item).
+    """
+    try:
+        select_query = (
+            "id_estoque, quantidade, data_validade, "
+            "item_cardapio("
+            "   id_item, nome_item, categoria, custo_unitario, "
+            "   funcionario_responsavel(nome)"
+            ")"
+        )
+        
+        response = (
+            supabase_client.table(ESTOQUE_TABELA)
+            .select(select_query)
+            .order("id_estoque", desc=False)
+            .execute()
+        )
+        
+        return response.data
+
+    except Exception as e:
+        print(f"Erro ao buscar itens do estoque: {e}")
         return None

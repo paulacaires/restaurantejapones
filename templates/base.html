@@ -13,7 +13,7 @@
 <body>
     <header class="main-header">
         <div class="logo">            
-            <a href="{{ url_for('cardapio') }}">
+            <a href="{{ url_for('estoque.estoque') }}">
                 <img src="{{ url_for('static', filename='images/logo_sem_fundo.svg') }}" alt="Logo do Restaurante" class="logo-img">
                 <span>Restaurante Japonês</span>
             </a>
@@ -25,8 +25,9 @@
 
         <nav class="nav-links">
             <ul>
-                <li><a href="{{ url_for('cardapio') }}">Cardápio</a></li>
-                <li><a href="{{ url_for('funcionarios') }}">Funcionário</a></li>
+                <li><a href="{{ url_for('estoque.estoque') }}">Estoque</a></li>
+                <li><a href="{{ url_for('cardapio.cardapio') }}">Cardápio</a></li>
+                <li><a href="{{ url_for('funcionarios.funcionarios') }}">Funcionários</a></li>
             </ul>
         </nav>
     </header>

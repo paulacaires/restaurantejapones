@@ -115,7 +115,10 @@ def buscar_todos_itens_estoque(supabase_client: Client):
     try:
         select_query = (
             "id_estoque, quantidade, data_validade, "
-            "item_cardapio(id_item, nome_item, categoria, custo_unitario, funcionario_responsavel)"
+            "item_cardapio("
+            "   id_item, nome_item, categoria, custo_unitario, "
+            "   funcionario_responsavel(nome)"
+            ")"
         )
         
         response = (

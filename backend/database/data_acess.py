@@ -14,7 +14,7 @@ def buscar_todos_clientes(supabase_client: Client):
     """
     try:
         # Consulta a VIEW criada no PostgreSQL
-        response = supabase_client.table(CLIENTES_VIEW).select("*").execute()
+        response = supabase_client.table(CLIENTES_TABELA).select("*").execute()
         
         # Retorna a lista de dados
         return response.data

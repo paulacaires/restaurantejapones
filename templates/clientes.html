@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Módulo de Clientes — Restaurante Japonês{% endblock %}
+
+{% block content %}
+    <h1>Módulo de Clientes</h1>
+
+    <h2>Clientes Cadastrados</h2>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>CPF</th>
+                <th>Nome</th>
+                <th>Saldo</th>
+                <th>Categoria</th>
+                <th>Curso</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for cliente in clientes %}
+            <tr>
+                <td>{{ cliente.cpf }}</td>
+                <td>{{ cliente.nome }}</td>
+                <td>R$ {{ "%.2f"|format(cliente.saldo|float) }}</td>
+                <td>{{ cliente.categoria }}</td>
+                <td>{{ cliente.curso or 'N/A' }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="5">Nenhum cliente cadastrado no banco de dados.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}

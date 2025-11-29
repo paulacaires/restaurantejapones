@@ -145,3 +145,37 @@ def verificar_baixo_estoque(estoque):
 
     return itens_alerta
 
+
+
+def buscar_todas_reservas(supabase):
+    """
+    Busca todas as reservas
+    """
+    try:
+        response = supabase.table("reserva_mesas").select("*, cliente(nome), mesas(lugares)").order("dia_reserva", desc=True).execute()
+        return response.data
+    except Exception as e:
+        print(f"Erro ao buscar reservas: {e}")
+        return []
+
+def buscar_todas_mesas(supabase):
+    """
+    Busca todas as mesas para preencher o formulário.
+    """
+    try:
+        response = supabase.table("mesas").select("*").order("numero").execute()
+        return response.data
+    except Exception as e:
+        print(f"Erro ao buscar mesas: {e}")
+        return []
+
+def criar_reserva(supabase, dados_reserva):
+    """
+    Insere uma nova reserva no banco.
+    """
+    try:
+        response = supabase.table("reserva_mesas").insert(dados_reserva).execute()
+        return response.data
+    except Exception as e:
+        print(f"Erro ao criar reserva: {e}")
+        return None

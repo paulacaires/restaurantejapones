@@ -79,3 +79,9 @@ INSERT INTO estoque (id_item, quantidade, data_validade) VALUES
 (11, 75, CURRENT_DATE + INTERVAL '180 days'), -- Chá Verde
 (12, 75, CURRENT_DATE + INTERVAL '180 days'), -- Refrigerante
 (13, 60, CURRENT_DATE + INTERVAL '180 days'); -- Suco Natural
+
+-- Inserir mesas 
+INSERT INTO mesas (numero, lugares) VALUES
+(1, 2), (2, 2), (3, 2),
+(4, 4), (5, 4), (6, 4), (7, 4),
+(8, 6), (9, 6), (10, 8);

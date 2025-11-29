@@ -6,8 +6,8 @@
     <h1>Módulo de Clientes</h1>
 
     <h2>Clientes Cadastrados</h2>
-    
-    <table>
+
+    <table class="tabela-clientes">
         <thead>
             <tr>
                 <th>CPF</th>
@@ -20,11 +20,11 @@
         <tbody>
             {% for cliente in clientes %}
             <tr>
-                <td>{{ cliente.cpf }}</td>
-                <td>{{ cliente.nome }}</td>
-                <td>R$ {{ "%.2f"|format(cliente.saldo|float) }}</td>
+                <td class="cpf">{{ cliente.cpf }}</td>
+                <td class="nome">{{ cliente.nome }}</td>
+                <td class="saldo">R$ {{ "%.2f"|format(cliente.saldo|float) }}</td>
                 <td>{{ cliente.categoria }}</td>
-                <td>{{ cliente.curso or 'N/A' }}</td>
+                <td>{{ cliente.curso }}</td>
             </tr>
             {% else %}
             <tr>

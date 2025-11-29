@@ -426,3 +426,41 @@ tr:hover td {
         transform: translateX(30px);
     }
 }
+
+/* =========================== */
+/*     TABELA DE CLIENTES      */
+/* =========================== */
+
+.tabela-clientes td {
+    padding: 10px;
+    border-bottom: 1px solid #eee;
+}
+
+/* CPF mais estreito */
+.tabela-clientes td.cpf {
+    width: 150px;
+    opacity: 80%;
+}
+
+.tabela-clientes td.nome,
+.tabela-clientes td.saldo {
+    font-weight: bold;
+}
+
+/* =========================== */
+/*     BOTÃO DE CONSUMO        */
+/* =========================== */
+
+.consumo-btn {
+    background: transparent;
+    color: var(--cor-primaria) !important;
+    border: solid var(--cor-primaria);    
+    padding: 8px 20px;
+    font-weight: 600 !important;
+    font-family: var(--fonte-titulo) !important;
+}
+
+.consumo-btn:hover {
+    background: var(--cor-primaria);
+    color: white !important;
+}

@@ -8,16 +8,31 @@ CARDAPIO_TABELA = "cardapio"
 ITEM_CARDAPIO_TABELA = "item_cardapio"
 ESTOQUE_TABELA = "estoque"
 
+CATEGORIA_CLIENTE = {
+    "meia_estudante": "Meia — Estudante",
+    "inteira_estudante": "Inteira — Estudante",
+    "visitante_prof": "Visitante / Professor",
+    "gratuidade": "Gratuidade"
+}
+
 def buscar_todos_clientes(supabase_client: Client):
     """
     Função que busca todos os clientes usando a View segura.
     """
     try:
-        # Consulta a VIEW criada no PostgreSQL
         response = supabase_client.table(CLIENTES_TABELA).select("*").execute()
-        
-        # Retorna a lista de dados
-        return response.data
+
+        dados = response.data  # lista de dicionários
+
+        # Adiciona campos normalizados
+        for cliente in dados:
+            cliente["categoria"] = CATEGORIA_CLIENTE.get(
+                cliente.get("categoria"),
+                cliente.get("categoria")
+            )
+
+        return dados
+
     except Exception as e:
         print(f"Erro ao buscar clientes: {e}")
         return None

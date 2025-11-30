@@ -221,7 +221,13 @@ def buscar_todas_mesas(supabase):
     Busca todas as mesas para preencher o formulário.
     """
     try:
-        response = supabase.table("mesas").select("*").order("numero").execute()
+        response = (
+            supabase.table("reservas")
+            .select("*")
+            .order("dia_reserva", ascending=True)
+            .order("momento_refeicao", foreign_table=None, ascending=True)
+            .execute()
+        )
         return response.data
     except Exception as e:
         print(f"Erro ao buscar mesas: {e}")

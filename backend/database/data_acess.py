@@ -8,6 +8,8 @@ CARDAPIO_TABELA = "cardapio"
 ITEM_CARDAPIO_TABELA = "item_cardapio"
 ESTOQUE_TABELA = "estoque"
 CONSUMO_TABELA = "consumo"
+RESERVAS_TABELA = "reservas"
+
 
 CATEGORIA_CLIENTE = {
     "meia_estudante": "Meia — Estudante",
@@ -202,4 +204,36 @@ def buscar_todos_consumos(supabase_client: Client):
     except Exception as e:
         print(f"Erro ao buscar os consumos: {e}")
         return None
-  
+
+def buscar_todas_reservas(supabase):
+    """
+    Busca todas as reservas
+    """
+    try:
+        response = supabase.table("reserva_mesas").select("*, cliente(nome), mesas(lugares)").order("dia_reserva", desc=True).execute()
+        return response.data
+    except Exception as e:
+        print(f"Erro ao buscar reservas: {e}")
+        return []
+
+def buscar_todas_mesas(supabase):
+    """
+    Busca todas as mesas para preencher o formulário.
+    """
+    try:
+        response = supabase.table("mesas").select("*").order("numero").execute()
+        return response.data
+    except Exception as e:
+        print(f"Erro ao buscar mesas: {e}")
+        return []
+
+def criar_reserva(supabase, dados_reserva):
+    """
+    Insere uma nova reserva no banco.
+    """
+    try:
+        response = supabase.table("reserva_mesas").insert(dados_reserva).execute()
+        return response.data
+    except Exception as e:
+        print(f"Erro ao criar reserva: {e}")
+        return None

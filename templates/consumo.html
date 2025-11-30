@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}Módulo de Consumo{% endblock %}
+
+{% block content %}
+
+<div class="consumo-page">
+    <h1>Registros de Consumo</h1>
+
+    <table class="tabela-consumos">
+        <thead>
+            <tr>
+                <th>CPF do Cliente</th>
+                <th>ID do Cardápio</th>
+                <th>Avaliação</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for consumo in consumos %}
+            <tr>
+                <td class="cliente-cpf">{{ consumo.cliente_cpf }}</td>
+                <td class="cardapio-id">{{ consumo.cardapio_id }}</td>
+                <td class="avaliacao">{{ consumo.avaliacao }}</td>
+            </tr>
+            {% else %}
+            <tr>
+                <td colspan="3">Nenhum consumo realizado.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a class="btn-flutuante" onclick="abrirModalConsumo()">+</a>
+
+    <!-- Modal de Registro de Consumo -->
+    <div id="modalConsumo" class="modal-overlay" onclick="fecharModalEstoque(event)">
+        <div class="modal-conteudo">
+
+            <h2>Registrar Consumo</h2>
+
+            <form action="{{ url_for('consumo.registrar_consumo') }}" method="post">
+
+                <!-- 1. Selecionar dia -->
+                <div class="form-group">
+                    <label for="dia">Dia</label>
+                    <input type="date" name="dia" class="form-control" required>
+                </div>
+
+                <!-- 2. Selecionar momento -->
+                <div class="form-group">
+                    <label for="momento">Período</label>
+                    <select name="momento" class="form-control" required>
+                        <option value="almoco">Almoço</option>
+                        <option value="janta">Janta</option>
+                    </select>
+                </div>
+
+                <hr>
+
+                <!-- 3. Autocomplete de aluno -->
+                <div class="form-group">
+                    <label for="busca_aluno">Cliente</label>
+                    <input 
+                        type="text"
+                        id="busca_aluno"
+                        class="form-control"
+                        placeholder="Digite o nome do aluno..."
+                        autocomplete="off"
+                        oninput="buscarAluno()"
+                        required
+                    >
+                    <div id="lista-alunos" class="autocomplete-list"></div>
+
+                    <!-- CPF oculto (preenchido ao clicar no aluno) -->
+                    <input type="hidden" name="cliente_cpf" id="cliente_cpf">
+                </div>
+
+                <!-- 4. Avaliação -->
+                <div class="form-group">
+                    <label>Avaliação</label>
+                    <div class="estrelas" id="estrelas">
+                        {% for i in range(1, 6) %}
+                            <span class="estrela" data-valor="{{ i }}">☆</span>
+                        {% endfor %}
+                    </div>
+                    <input type="hidden" name="avaliacao" id="avaliacao" value="0">
+                </div>
+
+                <br>
+
+                <button type="submit" class="btn btn-primary" style="width: 100%;">
+                    Registrar Consumo
+                </button>
+
+            </form>
+
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

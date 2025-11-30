@@ -7,17 +7,35 @@ FUNCIONARIOS_TABELA = "funcionarios"
 CARDAPIO_TABELA = "cardapio"
 ITEM_CARDAPIO_TABELA = "item_cardapio"
 ESTOQUE_TABELA = "estoque"
+CONSUMO_TABELA = "consumo"
+RESERVAS_TABELA = "reservas"
+
+
+CATEGORIA_CLIENTE = {
+    "meia_estudante": "Meia — Estudante",
+    "inteira_estudante": "Inteira — Estudante",
+    "visitante_prof": "Visitante / Professor",
+    "gratuidade": "Gratuidade"
+}
 
 def buscar_todos_clientes(supabase_client: Client):
     """
     Função que busca todos os clientes usando a View segura.
     """
     try:
-        # Consulta a VIEW criada no PostgreSQL
         response = supabase_client.table(CLIENTES_TABELA).select("*").execute()
-        
-        # Retorna a lista de dados
-        return response.data
+
+        dados = response.data  # lista de dicionários
+
+        # Adiciona campos normalizados
+        for cliente in dados:
+            cliente["categoria"] = CATEGORIA_CLIENTE.get(
+                cliente.get("categoria"),
+                cliente.get("categoria")
+            )
+
+        return dados
+
     except Exception as e:
         print(f"Erro ao buscar clientes: {e}")
         return None
@@ -145,3 +163,77 @@ def verificar_baixo_estoque(estoque):
 
     return itens_alerta
 
+def buscar_clientes_por_nome(supabase_client: Client, nome: str):
+    try:
+        # ILIKE (%) para busca parcial
+        response = (
+            supabase_client
+            .table(CLIENTES_TABELA)
+            .select("*")
+            .ilike("nome", f"%{nome}%")
+            .execute()
+        )
+        return response.data
+    except Exception as e:
+        print(f"Erro ao buscar clientes: {e}")
+        return []
+
+def buscar_cardapio(supabase_client: Client, dia, momento):
+    try:
+        response = (
+            supabase_client.table(CARDAPIO_TABELA)
+            .select("*")
+            .eq("dia", dia)
+            .eq("momento", momento)
+            .maybe_single()
+            .execute()
+        )
+        return response.data
+    except Exception as e:
+        print("Erro ao buscar cardápio:", e)
+        return None
+
+def buscar_todos_consumos(supabase_client: Client):
+    """
+    Função que busca todos os consumos realizados no Restaurante Japonês.
+    """
+    try:
+        # Consulta a TABELA 'consumo'
+        response = supabase_client.table(CONSUMO_TABELA).select("*").execute()
+        return response.data
+    except Exception as e:
+        print(f"Erro ao buscar os consumos: {e}")
+        return None
+
+def buscar_todas_reservas(supabase):
+    """
+    Busca todas as reservas
+    """
+    try:
+        response = supabase.table("reserva_mesas").select("*, cliente(nome), mesas(lugares)").order("dia_reserva", desc=True).execute()
+        return response.data
+    except Exception as e:
+        print(f"Erro ao buscar reservas: {e}")
+        return []
+
+def buscar_todas_mesas(supabase):
+    """
+    Busca todas as mesas para preencher o formulário.
+    """
+    try:
+        response = supabase.table("mesas").select("*").order("numero").execute()
+        return response.data
+    except Exception as e:
+        print(f"Erro ao buscar mesas: {e}")
+        return []
+
+def criar_reserva(supabase, dados_reserva):
+    """
+    Insere uma nova reserva no banco.
+    """
+    try:
+        response = supabase.table("reserva_mesas").insert(dados_reserva).execute()
+        return response.data
+    except Exception as e:
+        print(f"Erro ao criar reserva: {e}")
+        return None

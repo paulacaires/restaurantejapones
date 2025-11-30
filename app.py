@@ -8,6 +8,8 @@ from routes.estoque_routes import estoque_bp
 from routes.cardapio_routes import cardapio_bp
 from routes.funcionarios_routes import funcionarios_bp
 from routes.clientes_routes import clientes_bp
+from routes.consumo_routes import consumo_bp
+from routes.reservas_routes import reservas_bp
 
 def create_app():
 
@@ -31,6 +33,8 @@ def create_app():
     app.register_blueprint(cardapio_bp)
     app.register_blueprint(funcionarios_bp)
     app.register_blueprint(clientes_bp)
+    app.register_blueprint(consumo_bp)
+    app.register_blueprint(reservas_bp)
 
     return app
 

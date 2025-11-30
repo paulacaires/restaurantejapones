@@ -7,6 +7,7 @@ FUNCIONARIOS_TABELA = "funcionarios"
 CARDAPIO_TABELA = "cardapio"
 ITEM_CARDAPIO_TABELA = "item_cardapio"
 ESTOQUE_TABELA = "estoque"
+CONSUMO_TABELA = "consumo"
 
 CATEGORIA_CLIENTE = {
     "meia_estudante": "Meia — Estudante",
@@ -160,3 +161,45 @@ def verificar_baixo_estoque(estoque):
 
     return itens_alerta
 
+def buscar_clientes_por_nome(supabase_client: Client, nome: str):
+    try:
+        # ILIKE (%) para busca parcial
+        response = (
+            supabase_client
+            .table(CLIENTES_TABELA)
+            .select("*")
+            .ilike("nome", f"%{nome}%")
+            .execute()
+        )
+        return response.data
+    except Exception as e:
+        print(f"Erro ao buscar clientes: {e}")
+        return []
+
+def buscar_cardapio(supabase_client: Client, dia, momento):
+    try:
+        response = (
+            supabase_client.table(CARDAPIO_TABELA)
+            .select("*")
+            .eq("dia", dia)
+            .eq("momento", momento)
+            .maybe_single()
+            .execute()
+        )
+        return response.data
+    except Exception as e:
+        print("Erro ao buscar cardápio:", e)
+        return None
+
+def buscar_todos_consumos(supabase_client: Client):
+    """
+    Função que busca todos os consumos realizados no Restaurante Japonês.
+    """
+    try:
+        # Consulta a TABELA 'consumo'
+        response = supabase_client.table(CONSUMO_TABELA).select("*").execute()
+        return response.data
+    except Exception as e:
+        print(f"Erro ao buscar os consumos: {e}")
+        return None
+  

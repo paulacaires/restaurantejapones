@@ -464,3 +464,18 @@ tr:hover td {
     background: var(--cor-primaria);
     color: white !important;
 }
+
+/* =========================== */
+/*     ADICIONAR CONSUMO       */
+/* =========================== */
+
+/* Estrelas */
+.estrelas {
+    font-size: 26px;
+    cursor: pointer;
+}
+
+.estrelas .estrela {
+    margin-right: 5px;
+    cursor: pointer;
+}

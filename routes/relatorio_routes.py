@@ -1,5 +1,6 @@
 import os
 from flask import Blueprint, send_file
+from flask import current_app
 from reportlab.pdfgen import canvas
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.colors import HexColor
@@ -9,6 +10,8 @@ from reportlab.lib.utils import ImageReader
 # Para fontes diferentes
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
+
+from backend.relatorio_service import calcula_faturamento
 
 pdfmetrics.registerFont(TTFont("Asimovian", "static/Asimovian-Regular.ttf"))
 
@@ -68,9 +71,26 @@ def gerar_pdf():
     # Relatório financeiro
     y = height - 120
 
-    # Cardápios
-   
-    # 🔹 Conteúdo de exemplo
+    supabase = current_app.supabase
+
+    if not supabase:
+        return "Erro: Conexão com o banco de dados não estabelecida.", 500
+
+    data = calcula_faturamento(supabase)
+
+    y -= 40
+    pdf.setFont("Helvetica", 12)
+    pdf.drawString(40, y, f"Custo total ingredientes: R$ {data['custo_ingredientes']}")
+    y -= 20
+    pdf.drawString(40, y, f"Salários: R$ {data['custo_salarios']}")
+    y -= 20
+    pdf.drawString(40, y, f"Custo total: R$ {data['custo_total']}")
+    y -= 20
+    pdf.drawString(40, y, f"Faturamento: R$ {data['faturamento_total']}")
+    y -= 20
+    pdf.drawString(40, y, f"Lucro líquido: R$ {data['lucro']}")
+    y -= 20
+    pdf.drawString(40, y, f"Número total de refeições: {data['num_refeicoes']}")
    
     # 🔹 Finaliza e salva
     pdf.showPage()

@@ -58,6 +58,7 @@ def draw_header(pdf):
     pdf.setLineWidth(2)
     pdf.line(0, logo_y, width, logo_y)
 
+    pdf.setFillColor(HexColor("#000000"))
 
 @relatorio_bp.route("/gerar-pdf", methods=["GET"])
 def gerar_pdf():
@@ -68,31 +69,49 @@ def gerar_pdf():
     # Cabeçalho da página
     draw_header(pdf)
 
-    # Relatório financeiro
     y = height - 120
-
     supabase = current_app.supabase
 
     if not supabase:
         return "Erro: Conexão com o banco de dados não estabelecida.", 500
 
-    data = calcula_faturamento(supabase)
+    # Agora data contém vários meses
+    dados_mensais = calcula_faturamento(supabase)
 
-    y -= 40
-    pdf.setFont("Helvetica", 12)
-    pdf.drawString(40, y, f"Custo total ingredientes: R$ {data['custo_ingredientes']}")
-    y -= 20
-    pdf.drawString(40, y, f"Salários: R$ {data['custo_salarios']}")
-    y -= 20
-    pdf.drawString(40, y, f"Custo total: R$ {data['custo_total']}")
-    y -= 20
-    pdf.drawString(40, y, f"Faturamento: R$ {data['faturamento_total']}")
-    y -= 20
-    pdf.drawString(40, y, f"Lucro líquido: R$ {data['lucro']}")
-    y -= 20
-    pdf.drawString(40, y, f"Número total de refeições: {data['num_refeicoes']}")
-   
-    # 🔹 Finaliza e salva
+    pdf.setFont("Helvetica-Bold", 14)
+    pdf.drawString(40, y, "Resumo Mensal de Faturamento")
+    y -= 30
+
+    # Cabeçalho da tabela
+    pdf.setFont("Helvetica-Bold", 10)
+    pdf.drawString(40, y, "Mês")
+    pdf.drawString(140, y, "Faturamento")
+    pdf.drawString(250, y, "Custos Totais")
+    pdf.drawString(360, y, "Lucro")
+    pdf.drawString(450, y, "Refeições")
+    y -= 15
+
+    pdf.setLineWidth(1)
+    pdf.line(40, y, width - 40, y)
+    y -= 10
+
+    # Linhas da tabela
+    pdf.setFont("Helvetica", 10)
+
+    for mes, dados in sorted(dados_mensais.items()):
+        if y < 100:
+            pdf.showPage()
+            draw_header(pdf)
+            y = height - 150
+
+        pdf.drawString(40, y, mes)
+        pdf.drawString(140, y, f"R$ {dados['faturamento_total']}")
+        pdf.drawString(250, y, f"R$ {dados['custo_total']}")
+        pdf.drawString(360, y, f"R$ {dados['lucro']}")
+        pdf.drawString(450, y, str(dados["num_refeicoes"]))
+        y -= 20
+
+    # ---------- Finaliza PDF ----------
     pdf.showPage()
     pdf.save()
     buffer.seek(0)

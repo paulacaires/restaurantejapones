@@ -8,7 +8,6 @@ from flask import (
     current_app
 )
 
-
 from backend.database.data_acess import (
   buscar_todos_consumos
 )

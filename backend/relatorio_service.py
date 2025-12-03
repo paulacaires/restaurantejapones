@@ -31,7 +31,6 @@ def calcula_faturamento(supabase):
     itens_por_id = {i["id_item"]: i for i in itens_cardapio}
     clientes_por_cpf = {c["cpf"]: c for c in clientes}
 
-    # 📌 Agora cardápio por ID → muito importante para ligar consumo à data
     cardapio_por_id = {c["id_cardapio"]: c for c in cardapios}
 
     # -------------------------------
@@ -50,7 +49,7 @@ def calcula_faturamento(supabase):
     # -------------------------------
     # 3. AGRUPAR POR MÊS
     # -------------------------------
-    dados_mensais = {}  # Exemplo: {"2025-12": {...}}
+    dados_mensais = {}
 
     for consumo in consumos:
 

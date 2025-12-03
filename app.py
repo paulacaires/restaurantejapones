@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template
+from flask import Flask, redirect, render_template, url_for
 from supabase import create_client, Client
 from dotenv import load_dotenv
 
@@ -28,6 +28,10 @@ def create_app():
     except Exception as e:
         print(f"Erro ao conectar com Supabase: {e}")
         app.supabase = None
+
+    @app.route("/")
+    def index():
+        return redirect(url_for("estoque.estoque"))
 
     # Blueprints
     app.register_blueprint(estoque_bp)

@@ -10,6 +10,7 @@ from routes.funcionarios_routes import funcionarios_bp
 from routes.clientes_routes import clientes_bp
 from routes.consumo_routes import consumo_bp
 from routes.reservas_routes import reservas_bp
+from routes.relatorio_routes import relatorio_bp
 
 def create_app():
 
@@ -23,7 +24,7 @@ def create_app():
     try:
         url: str = os.environ.get("SUPABASE_URL")
         key: str = os.environ.get("SUPABASE_KEY")
-        app.supabase: Client = create_client(url, key)
+        app.supabase = create_client(url, key)
     except Exception as e:
         print(f"Erro ao conectar com Supabase: {e}")
         app.supabase = None
@@ -35,6 +36,7 @@ def create_app():
     app.register_blueprint(clientes_bp)
     app.register_blueprint(consumo_bp)
     app.register_blueprint(reservas_bp)
+    app.register_blueprint(relatorio_bp)
 
     return app
 

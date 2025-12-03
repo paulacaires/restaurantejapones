@@ -207,10 +207,16 @@ def buscar_todos_consumos(supabase_client: Client):
 
 def buscar_todas_reservas(supabase):
     """
-    Busca todas as reservas
+    Busca todas as reservas ordenando por dia e turno
     """
     try:
-        response = supabase.table("reserva_mesas").select("*, cliente(nome), mesas(lugares)").order("dia_reserva", desc=True).execute()
+        response = (
+            supabase.table("reserva_mesas")
+            .select("*, cliente(nome), mesas(lugares)")
+            .order("dia_reserva", desc=True)
+            .order("momento_refeicao")
+            .execute()
+        )
         return response.data
     except Exception as e:
         print(f"Erro ao buscar reservas: {e}")

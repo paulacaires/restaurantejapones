@@ -1,0 +1,124 @@
+import os
+from flask import Blueprint, send_file
+from flask import current_app
+from reportlab.pdfgen import canvas
+from reportlab.lib.pagesizes import A4
+from reportlab.lib.colors import HexColor
+from io import BytesIO
+from reportlab.lib.utils import ImageReader
+
+# Para fontes diferentes
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+
+from backend.relatorio_service import calcula_faturamento
+
+pdfmetrics.registerFont(TTFont("Asimovian", "static/Asimovian-Regular.ttf"))
+
+relatorio_bp = Blueprint("relatorio", __name__)
+
+# Função para desenhar cabeçalho
+def draw_header(pdf):
+    width, height = A4
+
+    logo_path = "static/images/logo_sem_fundo.png"
+
+    # Carregar imagem
+    logo = ImageReader(logo_path)
+
+    original_w, original_h = logo.getSize()
+
+    scale = 0.08
+    logo_width = original_w * scale
+    logo_height = original_h * scale
+
+    # Inserir logo no canto superior esquerdo
+    logo_x = 40
+    logo_y = height - 85
+
+    pdf.drawImage(
+        logo,
+        x=logo_x,
+        y=logo_y,
+        width=logo_width,
+        height=logo_height,
+        mask='auto'
+    )
+    
+    # DESLOCAR o título para depois do logo
+    titulo_x = logo_x + logo_width + 25 
+    titulo_y = logo_y + 20
+
+    pdf.setFont("Asimovian", 18)
+    pdf.setFillColor(HexColor("#b52e35"))
+    pdf.drawString(titulo_x, titulo_y, "Relatório Restaurante Japonês da UFSCar")
+    
+    # Linha abaixo do cabeçalho
+    pdf.setStrokeColor(HexColor("#3f395b"))
+    pdf.setLineWidth(2)
+    pdf.line(0, logo_y, width, logo_y)
+
+    pdf.setFillColor(HexColor("#000000"))
+
+@relatorio_bp.route("/gerar-pdf", methods=["GET"])
+def gerar_pdf():
+    buffer = BytesIO()
+    pdf = canvas.Canvas(buffer, pagesize=A4)
+    width, height = A4
+
+    # Cabeçalho da página
+    draw_header(pdf)
+
+    y = height - 120
+    supabase = current_app.supabase
+
+    if not supabase:
+        return "Erro: Conexão com o banco de dados não estabelecida.", 500
+
+    # Agora data contém vários meses
+    dados_mensais = calcula_faturamento(supabase)
+
+    pdf.setFont("Helvetica-Bold", 14)
+    pdf.drawString(40, y, "Resumo Mensal de Faturamento")
+    y -= 30
+
+    # Cabeçalho da tabela
+    pdf.setFont("Helvetica-Bold", 10)
+    pdf.drawString(40, y, "Mês")
+    pdf.drawString(140, y, "Faturamento")
+    pdf.drawString(250, y, "Custos Totais")
+    pdf.drawString(360, y, "Lucro")
+    pdf.drawString(450, y, "Refeições")
+    y -= 15
+
+    pdf.setLineWidth(1)
+    pdf.line(40, y, width - 40, y)
+    y -= 10
+
+    # Linhas da tabela
+    pdf.setFont("Helvetica", 10)
+
+    for mes, dados in sorted(dados_mensais.items()):
+        if y < 100:
+            pdf.showPage()
+            draw_header(pdf)
+            y = height - 150
+
+        pdf.drawString(40, y, mes)
+        pdf.drawString(140, y, f"R$ {dados['faturamento_total']}")
+        pdf.drawString(250, y, f"R$ {dados['custo_total']}")
+        pdf.drawString(360, y, f"R$ {dados['lucro']}")
+        pdf.drawString(450, y, str(dados["num_refeicoes"]))
+        y -= 20
+
+    # ---------- Finaliza PDF ----------
+    pdf.showPage()
+    pdf.save()
+    buffer.seek(0)
+
+    return send_file(
+        buffer,
+        as_attachment=False,
+        download_name="relatorio.pdf",
+        mimetype="application/pdf"
+    )

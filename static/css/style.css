@@ -154,7 +154,8 @@ tr:hover td {
 }
 
 /* Botão flutuante para adicionar novo item no estoque */
-.btn-flutuante {
+.btn-flutuante,
+.btn-reserva {
     position: fixed;
     bottom: 25px;
     right: 25px;
@@ -180,7 +181,7 @@ tr:hover td {
     z-index: 9999;
 }
 
-.btn-flutuante:hover {
+.btn-flutuante:hover  {
     transform: scale(1.1);
     box-shadow: 0 6px 14px rgba(0,0,0,0.3);
 }
@@ -479,61 +480,3 @@ tr:hover td {
     margin-right: 5px;
     cursor: pointer;
 }
-
-/* ======================= */
-/*     MAPA DE MESAS       */
-/* ======================= */
-
-.mapa-container {
-    position: relative;
-    margin: 0 auto;
-}
-
-/* ========== Mesa (base) ========== */
-
-.mesa {
-    position: absolute;
-    border: 3px solid var(--cor-primaria);
-    background: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: var(--cor-primaria);
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.15s;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-}
-
-.mesa:hover {
-    transform: scale(1.05);
-}
-
-.mesa.selecionada {
-    background: var(--cor-primaria);
-    color: white;
-}
-
-.mesa span {
-    font-size: 14px;
-    text-align: center;
-    line-height: 1.2;
-}
-
-/* ======================= */
-/*  POSICIONAMENTO DAS MESAS  */
-/* ======================= */
-
-/* Esquerda */
-.m1 { top: 40px; left: 60px; width: 40px; height: 80px; }
-.m2 { top: 40px; left: 140px; width: 80px; height: 120px; }
-.m3 { top: 150px; left: 60px; width: 40px; height: 90px; }
-.m4 { top: 180px; left: 140px; width: 80px; height: 120px; }
-.m5 { top: 270px; left: 60px; width: 40px; height: 90px; }
-
-/* Direita */
-.m6  { top: 40px; left: 330px; width: 180px; height: 80px; }
-.m7  { top: 160px; left: 330px; width: 80px;  height: 80px; }
-.m8  { top: 160px; left: 430px; width: 80px;  height: 80px; }
-.m9  { top: 260px; left: 330px; width: 80px;  height: 80px; }
-.m10 { top: 260px; left: 430px; width: 80px;  height: 80px; }

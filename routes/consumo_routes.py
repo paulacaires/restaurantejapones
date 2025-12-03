@@ -8,7 +8,6 @@ from flask import (
     current_app
 )
 
-
 from backend.database.data_acess import (
   buscar_todos_consumos
 )
@@ -16,6 +15,18 @@ from backend.database.data_acess import (
 CARDAPIO_TABELA = "cardapio"
 CONSUMO_TABELA = "consumo"
 CLIENTE_TABELA = "cliente"
+
+VALOR_PAGO_REFEICAO = {
+    "inteira_estudante": 9.50,
+    "visitante_prof": 17.50,
+}
+
+CATEGORIA_CLIENTE = {
+    "meia_estudante": "Meia — Estudante",
+    "inteira_estudante": "Inteira — Estudante",
+    "visitante_prof": "Visitante / Professor",
+    "gratuidade": "Gratuidade"
+}
 
 # Criação do blueprint
 consumo_bp = Blueprint("consumo", __name__)
@@ -90,6 +101,47 @@ def registrar_consumo():
             return redirect(url_for("consumo.consumo"))
         
         else:
+            # === Buscar o cliente ===
+            cliente_resp = (
+                supabase.table("cliente")
+                .select("saldo, categoria")
+                .eq("cpf", cliente_cpf)
+                .maybe_single()
+                .execute()
+            )
+
+            if not cliente_resp or not cliente_resp.data:
+                flash("Cliente não encontrado.", "erro")
+                return redirect(url_for("consumo.consumo"))
+
+            categoria = cliente_resp.data["categoria"]
+            saldo_atual = float(cliente_resp.data["saldo"])
+
+            # === Calcular valor da refeição ===
+            if categoria == "meia_estudante":
+                valor_refeicao = VALOR_PAGO_REFEICAO["inteira_estudante"] / 2
+            elif categoria == "inteira_estudante":
+                valor_refeicao = VALOR_PAGO_REFEICAO["inteira_estudante"]
+            elif categoria == "visitante_prof":
+                valor_refeicao = VALOR_PAGO_REFEICAO["visitante_prof"]
+            else:  # gratuidade
+                valor_refeicao = 0
+
+            # === Verificar saldo ===
+            if valor_refeicao > 0 and saldo_atual < valor_refeicao:
+                flash("Saldo insuficiente para realizar o consumo.", "erro")
+                return redirect(url_for("consumo.consumo"))
+
+            # === Atualizar saldo ===
+            novo_saldo = saldo_atual - valor_refeicao
+
+            update_resp = (
+                supabase.table("cliente")
+                .update({"saldo": novo_saldo})
+                .eq("cpf", cliente_cpf)
+                .execute()
+            )
+
             # Inserir novo consumo
             insert_resp = (
                 supabase.table("consumo")
